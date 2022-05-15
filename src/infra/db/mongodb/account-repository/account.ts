@@ -9,16 +9,11 @@ class AccountMongoRepository implements AddAccountRepository {
 
     const { insertedId: id } = await accoutnCollection.insertOne(accountData);
 
-    const { _id, ...accountWithoutId } = await accoutnCollection.findOne({
+    const account = await accoutnCollection.findOne({
       _id: id,
     });
 
-    const account = {
-      ...accountWithoutId,
-      id: _id.toHexString(),
-    } as AccountModel;
-
-    return account;
+    return MongoHelper.map(account);
   }
 }
 
